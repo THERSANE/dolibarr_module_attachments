@@ -198,6 +198,7 @@ class ActionsAttachments extends \attachments\RetroCompatCommonHookActions
 				elseif ($element === 'order_supplier') { $element_to_use = 'fournisseur'; $subdir = '/commande'; }
 				elseif ($element === 'invoice_supplier') { $element_to_use = 'fournisseur'; $sub_element_to_use = 'facture'; /* $subdir is defined in the next loop */ }
 				elseif ($element === 'shipping') {$element_to_use = 'expedition'; $subdir = '/sending';}
+				elseif ($element === 'supplier_proposal') {$element_to_use = 'supplier_proposal';}
 				else if(strpos($element, '_') !== false){
 					$part = explode('_', $element);
 					if(count($part)>1){
