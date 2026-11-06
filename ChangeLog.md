@@ -3,6 +3,16 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Release 1.6
+
+- NEW : Attachments picker in ajax on cards, no page reload - *06/11/2026* - 1.6.0
+  - The list of files is loaded and the selection applied in ajax, the text of the e-mail is kept
+  - Search on file names and refs, selected count per group, loading, empty and error states
+  - The trash button of attached files removes them in ajax too (file only taken off the e-mail, never deleted)
+  - Without the Dolibarr JS context (Dolibarr < 24 without backportdolcontext) and for mass sending from lists, the page reload flow is kept
+  - FIX : the page reload flow sent the selection in the URL ("Request-URI Too Long" with many files), everything is now posted
+  - Minimum Dolibarr version is now 20
+
 
 
 ## Release 1.5

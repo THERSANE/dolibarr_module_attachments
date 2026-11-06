@@ -263,9 +263,20 @@ function getFormConfirmAttachments($actionattachments, $TFilePathByTitleKey, $tr
                 });
                 $("body").append(form);
 
+                // Decode a query string component (http_build_query encodes spaces as "+")
+                var decodeParam = function(str) {
+                    try {
+                        return decodeURIComponent(String(str).replace(/\+/g, " "));
+                    } catch (e) {
+                        return str;
+                    }
+                };
+
                 for (var i in params) {
-                    var tmp= params[i].split("=");
-                    var key = tmp[0], value = tmp[1];
+                    if (params[i] === "") continue;
+                    var pos = params[i].indexOf("=");
+                    var key = decodeParam(pos < 0 ? params[i] : params[i].substring(0, pos));
+                    var value = pos < 0 ? "" : params[i].substring(pos + 1);
 
                     if (key === "message") {
                         let textarea = $(document.createElement("textarea"));
@@ -275,15 +286,20 @@ function getFormConfirmAttachments($actionattachments, $TFilePathByTitleKey, $tr
                         if (typeof CKEDITOR === "object" && typeof CKEDITOR.instances.message === "object") {
                             textarea.val(CKEDITOR.instances.message.getData());
                         } else {
-                            textarea.val(value);
+                            textarea.val(decodeParam(value));
                         }
 
                         textarea.appendTo(form);
                     } else if (key === "subject" || key === "deliveryreceipt") {
-                        $(document.createElement("input")).attr("type", "hidden").attr("name", key).attr("value", $("#"+key).val()).appendTo(form);
-                    } else {
+                        $(document.createElement("input")).attr("type", "hidden").attr("name", key).val($("#"+key).val()).appendTo(form);
+                    } else if (key === "id" || key === "action" || key === "token") {
+                        // Keep only the short routing parameters in the URL
                         if (paramsGet.length > 0) paramsGet+= "&";
-                        paramsGet+= key + "=" + value;
+                        paramsGet+= params[i];
+                    } else {
+                        // Everything else (selected files, mail form fields) goes in the POST body
+                        // to avoid "Request-URI Too Long" errors when many files are listed
+                        $(document.createElement("input")).attr("type", "hidden").attr("name", key).val(decodeParam(value)).appendTo(form);
                     }
                 }
                 form.attr("action", action + "?" + paramsGet);
@@ -297,4 +313,54 @@ function getFormConfirmAttachments($actionattachments, $TFilePathByTitleKey, $tr
     $formconfirm = str_replace('location.href = urljump;', 'customDialogByPhTouch(urljump);', $formconfirm);
 
     return $formconfirm;
+}
+
+/**
+ * HTML of the attached files of an e-mail form, same markup as FormMail::get_form() so that the
+ * native remove button (input.removedfile, form submit) keeps working on rows built in ajax.
+ *
+ * @param   string  $trackid        Track id of the e-mail form
+ * @param   bool    $withDelete     Show the remove button (false when attachments are read only)
+ * @param   int     $entity         Entity of the object (for the preview link)
+ * @return  string                  HTML
+ */
+function attachmentsGetAttachedFilesHtml($trackid, $withDelete = true, $entity = 0)
+{
+	global $conf, $db;
+
+	include_once DOL_DOCUMENT_ROOT.'/core/class/html.formmail.class.php';
+	include_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
+
+	$formmail = new FormMail($db);
+	$formmail->trackid = $trackid;
+	$TFile = $formmail->get_attached_files();
+	$formfile = new FormFile($db);
+
+	if (empty($entity)) $entity = $conf->entity;
+
+	$out = '';
+	foreach ($TFile['paths'] as $key => $val) {
+		if ($val === '') continue;
+		$name = isset($TFile['names'][$key]) ? $TFile['names'][$key] : basename($val);
+
+		$relativepathtofile = substr($val, (strlen(DOL_DATA_ROOT) - strlen($val)));
+		if ($entity > 1) {
+			$relativepathtofile = str_replace('/'.$entity.'/', '/', $relativepathtofile);
+		}
+		// Try to extract data from full path
+		$formfile_params = array();
+		preg_match('#^(/)(\w+)(/)(.+)$#', $relativepathtofile, $formfile_params);
+
+		$out .= '<div id="attachfile_'.$key.'">';
+		$out .= img_mime($name).dol_escape_htmltag($name);
+		if (!empty($formfile_params[2])) {
+			$out .= ' '.$formfile->showPreview(array(), $formfile_params[2], $formfile_params[4], 0, ($entity == 1 ? '' : 'entity='.((int) $entity)));
+		}
+		if ($withDelete) {
+			$out .= ' <input type="image" style="border: 0px;" src="'.DOL_URL_ROOT.'/theme/'.$conf->theme.'/img/delete.png" value="'.($key + 1).'" class="removedfile input-nobottom" id="removedfile_'.$key.'" name="removedfile_'.$key.'" />';
+		}
+		$out .= '<br></div>';
+	}
+
+	return $out;
 }

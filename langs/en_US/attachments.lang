@@ -33,3 +33,26 @@ AttachmentsTitleTask = Task
 
 AttachmentsFiltered = Elements corresponding to your search term
 AttachmentsSelectedOnTotalAvailable = Number of selected elements on total available
+
+# AJAX PICKER
+AttachmentsOpenPicker = Attach files of this document, of its linked objects or of the EDM
+AttachmentsPickerHelp = Check the files to attach, uncheck the ones to remove from the e-mail.
+AttachmentsCloseDialog = Close
+AttachmentsSearchPlaceholder = Search a file or a reference
+AttachmentsSelectedSummary = %s selected out of %s
+AttachmentsLoading = Loading files…
+AttachmentsLoadError = The list of files could not be loaded. Check your connection and try again.
+AttachmentsRetry = Try again
+AttachmentsNoFile = No file found for this document
+AttachmentsNoFileHelp = Files of linked objects and products are only listed when the matching options are enabled in the module setup.
+AttachmentsNoMatch = No matching file
+AttachmentsNoResultFor = No file matches "%s"
+AttachmentsCurrentDocument = Current document
+AttachmentsApplySelection = Apply selection
+AttachmentsApplying = Updating…
+AttachmentsNoChange = No change to apply
+AttachmentsApplyError = The attachments could not be updated. Your selection is kept, please try again.
+AttachmentsNbAdded = %s file(s) attached
+AttachmentsNbRemoved = %s file(s) removed
+AttachmentsNbFailed = %s file(s) could not be attached: the temporary folder of the user is not writable by the web server. Contact your administrator.
+AttachmentsRemoveOutdated = The list of attachments changed in the meantime (another tab?). It has been refreshed, nothing was removed.

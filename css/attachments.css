@@ -1,0 +1,334 @@
+/* E-mail attachments picker (js/attachments.js) */
+
+.attachments-modal {
+	--att-bg: var(--colorbackbody, #fff);
+	--att-text: var(--colortext, #1f2433);
+	--att-muted: rgba(128, 128, 128, 0.95);
+	--att-border: rgba(128, 128, 128, 0.28);
+	--att-hover: rgba(128, 128, 128, 0.10);
+	--att-accent: var(--colortextlink, #0a63c9);
+	--att-danger: #b91c1c;
+	--att-danger-bg: rgba(220, 38, 38, 0.10);
+	--att-radius: 8px;
+	--att-gap: 12px;
+
+	color: var(--att-text);
+	background: var(--att-bg);
+	border: none;
+	border-radius: var(--att-radius);
+	box-shadow: 0 2px 16px rgba(0, 0, 0, 0.25);
+	padding: 20px;
+	width: 90%;
+	max-width: 720px;
+	max-height: 85vh;
+}
+
+.attachments-modal::backdrop {
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.attachments-modal-content {
+	display: flex;
+	flex-direction: column;
+	gap: var(--att-gap);
+	max-height: calc(85vh - 40px);
+}
+
+.attachments-modal-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--att-gap);
+	flex-shrink: 0;
+}
+
+.attachments-modal-title {
+	margin: 0;
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.attachments-modal-subtitle {
+	margin: 4px 0 0;
+	color: var(--att-muted);
+	font-size: 0.875rem;
+}
+
+.attachments-close {
+	appearance: none;
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	border: none;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--att-muted);
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.attachments-close:hover {
+	background: var(--att-hover);
+	color: var(--att-text);
+}
+
+.attachments-modal-toolbar {
+	display: flex;
+	align-items: center;
+	gap: var(--att-gap);
+	flex-shrink: 0;
+}
+
+.attachments-modal-toolbar[hidden] {
+	display: none;
+}
+
+.attachments-search {
+	flex: 1 1 auto;
+	min-width: 0;
+	min-height: 32px;
+	padding: 4px 10px;
+}
+
+.attachments-summary {
+	flex-shrink: 0;
+	color: var(--att-muted);
+	font-size: 0.875rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.attachments-modal-body {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	min-height: 120px;
+	border: 1px solid var(--att-border);
+	border-radius: 6px;
+}
+
+.attachments-group + .attachments-group {
+	border-top: 1px solid var(--att-border);
+}
+
+.attachments-group[hidden] {
+	display: none;
+}
+
+.attachments-group > summary {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 12px;
+	cursor: pointer;
+	font-weight: 600;
+	list-style: none;
+	position: sticky;
+	top: 0;
+	background: var(--att-bg);
+	z-index: 1;
+}
+
+.attachments-group > summary::-webkit-details-marker {
+	display: none;
+}
+
+.attachments-group > summary::before {
+	content: "\25B8";
+	display: inline-block;
+	width: 12px;
+	color: var(--att-muted);
+	transition: transform 0.15s ease;
+}
+
+.attachments-group[open] > summary::before {
+	transform: rotate(90deg);
+}
+
+.attachments-group > summary:hover {
+	background: var(--att-hover);
+}
+
+.attachments-group-label {
+	flex: 1 1 auto;
+}
+
+.attachments-count {
+	flex-shrink: 0;
+	padding: 1px 8px;
+	border-radius: 10px;
+	background: var(--att-hover);
+	color: var(--att-muted);
+	font-size: 0.8rem;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.attachments-count--active {
+	background: var(--att-accent);
+	color: #fff;
+}
+
+.attachments-group-body {
+	padding: 0 12px 8px;
+}
+
+.attachments-ref[hidden],
+.attachments-file[hidden] {
+	display: none;
+}
+
+.attachments-ref-title {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 0 4px 20px;
+	color: var(--att-muted);
+	font-size: 0.85rem;
+	font-weight: 600;
+}
+
+.attachments-tag {
+	padding: 0 6px;
+	border: 1px solid var(--att-accent);
+	border-radius: 4px;
+	color: var(--att-accent);
+	font-size: 0.75rem;
+	font-weight: 600;
+}
+
+.attachments-file {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-height: 32px;
+	padding: 2px 8px 2px 20px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.attachments-file:hover {
+	background: var(--att-hover);
+}
+
+.attachments-file input {
+	flex-shrink: 0;
+	margin: 0;
+}
+
+.attachments-file-name {
+	overflow-wrap: anywhere;
+}
+
+.attachments-state {
+	padding: 24px 16px;
+	text-align: center;
+}
+
+.attachments-state[hidden] {
+	display: none;
+}
+
+.attachments-state p {
+	margin: 0 0 8px;
+}
+
+.attachments-muted {
+	color: var(--att-muted);
+	font-size: 0.875rem;
+}
+
+.attachments-group-nomatch[hidden] {
+	display: none;
+}
+
+.attachments-modal-error {
+	padding: 8px 12px;
+	border-radius: 6px;
+	background: var(--att-danger-bg);
+	color: var(--att-danger);
+	font-size: 0.875rem;
+}
+
+.attachments-modal-error[hidden] {
+	display: none;
+}
+
+/* Cancel left, primary action right */
+.attachments-modal-actions {
+	display: flex;
+	justify-content: space-between;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+.attachments-modal .dialog-btn {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	height: 36px;
+	padding: 0 16px;
+	font-size: 14px;
+	font-weight: 600;
+	border: 0;
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.attachments-modal .dialog-btn-secondary {
+	background: transparent;
+	color: var(--att-text);
+	box-shadow: inset 0 0 0 1px var(--att-border);
+}
+
+.attachments-modal .dialog-btn-secondary:hover {
+	background: var(--att-hover);
+}
+
+.attachments-modal .dialog-btn-primary {
+	background: var(--att-accent);
+	color: #fff;
+}
+
+.attachments-modal .dialog-btn-primary:hover:not(:disabled) {
+	filter: brightness(0.92);
+}
+
+.attachments-modal .dialog-btn:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.attachments-modal .dialog-btn:focus-visible,
+.attachments-close:focus-visible,
+.attachments-group > summary:focus-visible {
+	outline: 2px solid var(--att-accent);
+	outline-offset: 2px;
+}
+
+.attachments-modal--busy .attachments-modal-body {
+	opacity: 0.6;
+}
+
+.attachments-launcher {
+	margin-left: 6px;
+	vertical-align: middle;
+}
+
+@media (max-width: 600px) {
+	.attachments-modal {
+		width: 100%;
+		max-height: 100vh;
+		padding: 16px;
+	}
+
+	.attachments-modal-toolbar {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}
+
+/* Attached file row being removed in ajax */
+#mailform .attachments-row--removing {
+	opacity: 0.4;
+	pointer-events: none;
+}

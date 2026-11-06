@@ -32,3 +32,26 @@ AttachmentsShipping=Expedition
 
 AttachmentsFiltered=Nombre d'éléments correspondant à votre recherche
 AttachmentsSelectedOnTotalAvailable=Nombre d'éléments sélectionné sur le total disponible
+
+# AJAX PICKER
+AttachmentsOpenPicker=Joindre des fichiers de ce document, de ses objets liés ou de la GED
+AttachmentsPickerHelp=Cochez les fichiers à joindre, décochez ceux à retirer du mail.
+AttachmentsCloseDialog=Fermer
+AttachmentsSearchPlaceholder=Rechercher un fichier ou une référence
+AttachmentsSelectedSummary=%s sélectionné(s) sur %s
+AttachmentsLoading=Chargement des fichiers…
+AttachmentsLoadError=Impossible de charger la liste des fichiers. Vérifiez votre connexion puis réessayez.
+AttachmentsRetry=Réessayer
+AttachmentsNoFile=Aucun fichier trouvé pour ce document
+AttachmentsNoFileHelp=Les fichiers des objets liés et des produits ne sont proposés que si les options correspondantes sont activées dans la configuration du module.
+AttachmentsNoMatch=Aucun fichier ne correspond
+AttachmentsNoResultFor=Aucun fichier ne correspond à « %s »
+AttachmentsCurrentDocument=Document courant
+AttachmentsApplySelection=Valider la sélection
+AttachmentsApplying=Mise à jour…
+AttachmentsNoChange=Aucune modification à appliquer
+AttachmentsApplyError=Les pièces jointes n'ont pas pu être mises à jour. Votre sélection est conservée, réessayez.
+AttachmentsNbAdded=%s fichier(s) joint(s)
+AttachmentsNbRemoved=%s fichier(s) retiré(s)
+AttachmentsNbFailed=%s fichier(s) n'ont pas pu être joints : le dossier temporaire de l'utilisateur n'est pas accessible en écriture par le serveur web. Contactez votre administrateur.
+AttachmentsRemoveOutdated=La liste des pièces jointes a changé entre-temps (autre onglet ?). Elle vient d'être rafraîchie, rien n'a été retiré.
